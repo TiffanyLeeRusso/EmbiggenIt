@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Embiggen It</string>
+    <string name="hint_text">Type something…</string>
+    <string name="embiggen_button">Embiggen It!</string>
+    <string name="clear_button">✕</string>
+    <string name="clear_desc">Clear text</string>
+</resources>

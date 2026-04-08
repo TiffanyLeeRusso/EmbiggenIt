@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fullscreenRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/fullscreenText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp"
+        android:textColor="@color/text_primary"
+        android:textSize="48sp"
+        android:lineSpacingMultiplier="1.25"
+        android:breakStrategy="simple"
+        android:hyphenationFrequency="none"
+        android:fontFamily="sans-serif"
+        android:gravity="top|start" />
+
+</ScrollView>
