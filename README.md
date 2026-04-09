@@ -4,8 +4,7 @@ A simple, no-nonsense large-text display app for Android. Type your message, hit
 
 No ads. No history. No bloat.
 
-<img src="https://github.com/TiffanyLeeRusso/EmbiggenIt/blob/main/screenshots/1MainDark.jpg" alt="Main view (dark mode)" style="width:50%; height:auto;">
-<img src="https://github.com/TiffanyLeeRusso/EmbiggenIt/blob/main/screenshots/4Fullscreen.jpg" alt="Fullscreen view" style="width:50%; height:auto;">
+<img src="https://github.com/TiffanyLeeRusso/EmbiggenIt/blob/main/screenshots/1MainDark.jpg" alt="Main view (dark mode)" style="width:30%; height:auto;">
 
 
 ---
