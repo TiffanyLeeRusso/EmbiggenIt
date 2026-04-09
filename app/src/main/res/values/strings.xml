@@ -5,4 +5,12 @@
     <string name="embiggen_button">Embiggen It!</string>
     <string name="clear_button">✕</string>
     <string name="clear_desc">Clear text</string>
+    <string name="settings_button">⚙</string>
+    <string name="settings_desc">Settings</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_color_mode_label">Color Mode</string>
+    <string name="settings_mode_system">System default</string>
+    <string name="settings_mode_light">Light</string>
+    <string name="settings_mode_dark">Dark</string>
+    <string name="settings_close">Close</string>
 </resources>

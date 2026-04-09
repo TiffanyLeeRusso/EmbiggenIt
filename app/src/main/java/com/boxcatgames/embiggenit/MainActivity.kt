@@ -1,17 +1,28 @@
 package com.boxcatgames.embiggenit
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RadioGroup
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        const val PREFS_NAME = "embiggen_prefs"
+        const val KEY_NIGHT_MODE = "night_mode"
+    }
 
     private lateinit var editText: EditText
     private lateinit var embiggenButton: Button
     private lateinit var clearButton: Button
+    private lateinit var settingsButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         editText = findViewById(R.id.editText)
         embiggenButton = findViewById(R.id.embiggenButton)
         clearButton = findViewById(R.id.clearButton)
+        settingsButton = findViewById(R.id.settingsButton)
 
         embiggenButton.setOnClickListener {
             val text = editText.text.toString()
@@ -34,6 +46,10 @@ class MainActivity : AppCompatActivity() {
             editText.text.clear()
             editText.requestFocus()
         }
+
+        settingsButton.setOnClickListener {
+            showSettingsDialog()
+        }
     }
 
     override fun onResume() {
@@ -44,5 +60,42 @@ class MainActivity : AppCompatActivity() {
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
         }, 100)
+    }
+
+    private fun showSettingsDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_settings, null)
+
+        val radioGroup = dialogView.findViewById<RadioGroup>(R.id.colorModeGroup)
+        val versionText = dialogView.findViewById<TextView>(R.id.versionText)
+
+        // Set version string
+        val versionName = packageManager.getPackageInfo(packageName, 0).versionName
+        versionText.text = "Embiggen It v$versionName"
+
+        // Reflect current saved mode
+        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val currentMode = prefs.getInt(KEY_NIGHT_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        when (currentMode) {
+            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> radioGroup.check(R.id.radioSystem)
+            AppCompatDelegate.MODE_NIGHT_NO            -> radioGroup.check(R.id.radioLight)
+            AppCompatDelegate.MODE_NIGHT_YES           -> radioGroup.check(R.id.radioDark)
+        }
+
+        // Apply immediately when selection changes; activity recreates automatically
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            val newMode = when (checkedId) {
+                R.id.radioLight -> AppCompatDelegate.MODE_NIGHT_NO
+                R.id.radioDark  -> AppCompatDelegate.MODE_NIGHT_YES
+                else            -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            }
+            prefs.edit().putInt(KEY_NIGHT_MODE, newMode).apply()
+            AppCompatDelegate.setDefaultNightMode(newMode)
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.settings_title))
+            .setView(dialogView)
+            .setPositiveButton(getString(R.string.settings_close), null)
+            .show()
     }
 }
