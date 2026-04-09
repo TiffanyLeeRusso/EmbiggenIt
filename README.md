@@ -8,12 +8,12 @@ No ads. No history. No bloat.
 
 ## Features
 
-- **Instant input** — keyboard opens automatically on launch, ready to type
-- **Fullscreen display** — 48sp text, wraps and scrolls, never shrinks
-- **Full brightness** — screen goes to max brightness in fullscreen mode, automatically restored on exit
-- **Free rotation** — fullscreen view rotates freely regardless of system orientation lock
-- **Light & dark modes** — clean black-on-white and white-on-dark-grey themes, manually selectable or system-defaulted
-- **Tap to dismiss** — tap anywhere in fullscreen to return to the input screen
+- **Instant input**: Keyboard opens automatically on launch, ready to type
+- **Fullscreen display**: 48sp text, wraps and scrolls, never shrinks
+- **Full brightness**: Screen goes to max brightness in fullscreen mode, automatically restored on exit
+- **Free rotation**: Fullscreen view rotates freely regardless of system orientation lock
+- **Light & dark modes**: Clean black-on-white and white-on-dark-grey themes, manually selectable or system-defaulted
+- **Tap to dismiss**: Tap anywhere in fullscreen to return to the input screen
 
 ## Usage
 
