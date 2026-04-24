@@ -70,26 +70,26 @@ class MainActivity : AppCompatActivity() {
 
         // Set version string
         val versionName = packageManager.getPackageInfo(packageName, 0).versionName
-        versionText.text = "Embiggen It v$versionName"
+        versionText.text = NightModePreference.versionLabel(versionName)
 
         // Reflect current saved mode
         val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val currentMode = prefs.getInt(KEY_NIGHT_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        val currentMode = NightModePreference.load(prefs)
         when (currentMode) {
-            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> radioGroup.check(R.id.radioSystem)
-            AppCompatDelegate.MODE_NIGHT_NO            -> radioGroup.check(R.id.radioLight)
-            AppCompatDelegate.MODE_NIGHT_YES           -> radioGroup.check(R.id.radioDark)
+            NightModePreference.Selection.SYSTEM -> radioGroup.check(R.id.radioSystem)
+            NightModePreference.Selection.LIGHT  -> radioGroup.check(R.id.radioLight)
+            NightModePreference.Selection.DARK   -> radioGroup.check(R.id.radioDark)
         }
 
         // Apply immediately when selection changes; activity recreates automatically
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            val newMode = when (checkedId) {
-                R.id.radioLight -> AppCompatDelegate.MODE_NIGHT_NO
-                R.id.radioDark  -> AppCompatDelegate.MODE_NIGHT_YES
-                else            -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            val selection = when (checkedId) {
+                R.id.radioLight -> NightModePreference.Selection.LIGHT
+                R.id.radioDark  -> NightModePreference.Selection.DARK
+                else            -> NightModePreference.Selection.SYSTEM
             }
-            prefs.edit().putInt(KEY_NIGHT_MODE, newMode).apply()
-            AppCompatDelegate.setDefaultNightMode(newMode)
+            NightModePreference.save(prefs, selection)
+            AppCompatDelegate.setDefaultNightMode(NightModePreference.toDelegate(selection))
         }
 
         AlertDialog.Builder(this)
