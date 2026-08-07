@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:fitsSystemWindows="true"
     android:background="@color/background">
 
     <EditText
@@ -20,6 +20,8 @@
         android:textColorHint="@color/text_hint"
         android:textSize="22sp"
         android:lineSpacingMultiplier="1.3"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:paddingBottom="12dp" />
 
     <!-- Divider -->
@@ -34,7 +36,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp">
 
         <Button
             android:id="@+id/clearButton"
