@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         val versionText = dialogView.findViewById<TextView>(R.id.versionText)
 
         // Set version string
-        val versionName = packageManager.getPackageInfo(packageName, 0).versionName
+        val versionName = packageManager.getPackageInfo(packageName, 0).versionName ?: "?"
         versionText.text = NightModePreference.versionLabel(versionName)
 
         // Reflect current saved mode
