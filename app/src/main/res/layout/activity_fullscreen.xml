@@ -1,23 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fullscreenRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:fillViewport="true">
+    android:orientation="horizontal"
+    android:background="@color/background">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/fullscreenText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp"
-        android:textColor="@color/text_primary"
-        android:textSize="48sp"
-        android:lineSpacingMultiplier="1.25"
-        android:breakStrategy="simple"
-        android:hyphenationFrequency="none"
-        android:fontFamily="sans-serif"
-        android:gravity="top|start" />
+    <!-- Text area: fills all space left of the slider bar -->
+    <ScrollView
+        android:id="@+id/fullscreenScroll"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-</ScrollView>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/fullscreenText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp"
+            android:textColor="@color/text_primary"
+            android:textSize="48sp"
+            android:lineSpacingMultiplier="1.25"
+            android:breakStrategy="simple"
+            android:hyphenationFrequency="none"
+            android:fontFamily="sans-serif"
+            android:gravity="top|start" />
+
+    </ScrollView>
+
+    <!--
+        Vertical slider bar — right edge, not part of tap-to-close zone.
+        SeekBar is rotated -90° in FullscreenActivity so dragging up = bigger.
+        FrameLayout acts as the sized container for the rotated SeekBar.
+    -->
+    <FrameLayout
+        android:id="@+id/sliderBar"
+        android:layout_width="56dp"
+        android:layout_height="match_parent"
+        android:background="@color/slider_bar_background"
+        android:clickable="true"
+        android:focusable="true">
+
+        <SeekBar
+            android:id="@+id/textSizeSeekBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:max="64"
+            android:progress="16" />
+
+    </FrameLayout>
+
+</LinearLayout>

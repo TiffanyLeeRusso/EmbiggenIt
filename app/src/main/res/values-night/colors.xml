@@ -7,4 +7,5 @@
     <color name="colorPrimary">#EEEEEE</color>
     <color name="colorPrimaryVariant">#CCCCCC</color>
     <color name="colorOnPrimary">#1A1A1A</color>
+    <color name="slider_bar_background">#33FFFFFF</color>
 </resources>

@@ -4,40 +4,72 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 
 /**
- * Encapsulates night mode preference read/write and the mapping between
- * radio button selection labels and AppCompatDelegate constants.
- *
+ * Encapsulates all app preferences: night mode and text size.
  * Kept free of Activity/Context references so it can be unit tested on the JVM.
  */
 object NightModePreference {
+
+    // ---- Night mode ----
 
     const val KEY_NIGHT_MODE = "night_mode"
 
     enum class Selection { SYSTEM, LIGHT, DARK }
 
-    /** Map a [Selection] to the corresponding [AppCompatDelegate] night mode constant. */
     fun toDelegate(selection: Selection): Int = when (selection) {
         Selection.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         Selection.LIGHT  -> AppCompatDelegate.MODE_NIGHT_NO
         Selection.DARK   -> AppCompatDelegate.MODE_NIGHT_YES
     }
 
-    /** Map an [AppCompatDelegate] night mode constant back to a [Selection]. */
     fun fromDelegate(mode: Int): Selection = when (mode) {
         AppCompatDelegate.MODE_NIGHT_NO  -> Selection.LIGHT
         AppCompatDelegate.MODE_NIGHT_YES -> Selection.DARK
         else                             -> Selection.SYSTEM
     }
 
-    /** Read the saved mode from [prefs], defaulting to [Selection.SYSTEM]. */
     fun load(prefs: SharedPreferences): Selection =
         fromDelegate(prefs.getInt(KEY_NIGHT_MODE, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM))
 
-    /** Persist [selection] to [prefs]. */
     fun save(prefs: SharedPreferences, selection: Selection) {
         prefs.edit().putInt(KEY_NIGHT_MODE, toDelegate(selection)).apply()
     }
 
-    /** Format the version string shown in the settings dialog. */
-    fun versionLabel(versionName: String): String = "Embiggen It v$versionName"
+    // ---- Text size ----
+
+    const val KEY_TEXT_SIZE_SP = "text_size_sp"
+    const val MIN_TEXT_SIZE_SP = 32f
+    const val MAX_TEXT_SIZE_SP = 96f
+    const val DEFAULT_TEXT_SIZE_SP = 48f
+    const val SEEKBAR_MAX = 64 // 1 step = 1sp (96 - 32 = 64)
+
+    /** Map SeekBar progress (0..64) to sp value (32..96). */
+    fun progressToSp(progress: Int): Float = MIN_TEXT_SIZE_SP + progress
+
+    /** Map sp value to SeekBar progress. */
+    fun spToProgress(sp: Float): Int = (sp - MIN_TEXT_SIZE_SP).toInt().coerceIn(0, SEEKBAR_MAX)
+
+    fun loadTextSize(prefs: SharedPreferences): Float =
+        prefs.getFloat(KEY_TEXT_SIZE_SP, DEFAULT_TEXT_SIZE_SP)
+
+    fun saveTextSize(prefs: SharedPreferences, sp: Float) {
+        prefs.edit().putFloat(KEY_TEXT_SIZE_SP, sp).apply()
+    }
+
+    // ---- Slider side ----
+
+    const val KEY_SLIDER_SIDE = "slider_side"
+
+    enum class SliderSide { RIGHT, LEFT }
+
+    fun loadSliderSide(prefs: SharedPreferences): SliderSide =
+        if (prefs.getString(KEY_SLIDER_SIDE, "RIGHT") == "LEFT") SliderSide.LEFT
+        else SliderSide.RIGHT
+
+    fun saveSliderSide(prefs: SharedPreferences, side: SliderSide) {
+        prefs.edit().putString(KEY_SLIDER_SIDE, side.name).apply()
+    }
+
+    // ---- Shared ----
+
+    fun versionLabel(versionName: String): String = "Embiggen It! v$versionName"
 }
