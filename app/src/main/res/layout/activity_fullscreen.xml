@@ -49,7 +49,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:max="64"
-            android:progress="16" />
+            android:progress="16"
+            android:thumb="@drawable/seekbar_thumb"
+            android:splitTrack="false"/>
 
     </FrameLayout>
 
