@@ -26,7 +26,7 @@ No ads. No history. No bloat.
 4. Use **✕** to clear the text field
 5. Use **⚙** to switch between Light, Dark, and System Default color modes
 
-## Building
+## Building (debug/apk)
 
 Requires Android SDK (minSdk 26, targetSdk 34) and JDK 8+.
 
@@ -34,6 +34,16 @@ Requires Android SDK (minSdk 26, targetSdk 34) and JDK 8+.
 ./gradlew assembleDebug
 adb install app/build/outputs/apk/debug/app-debug.apk
 ```
+
+## Building (aab)
+
+Bump versionCode and versionName in app/build.gradle first.
+
+```bash
+./gradlew bundleRelease
+```
+
+Signed .aab will be at app/build/outputs/bundle/release/app-release.aab.
 
 > **Note:** `gradle/wrapper/gradle-wrapper.jar` is not included in the repository.
 > Run `gradle wrapper --gradle-version 8.4` once to generate it, or let Android Studio handle it on first sync.
