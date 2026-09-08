@@ -35,6 +35,20 @@ Requires Android SDK (minSdk 26, targetSdk 34) and JDK 8+.
 adb install app/build/outputs/apk/debug/app-debug.apk
 ```
 
+When using Android Studio's simulator and want to make sure the new build runs:
+
+```bash
+./gradlew clean assembleDebug
+adb uninstall com.boxcatgames.embiggenit
+adb install app/build/outputs/apk/debug/app-debug.apk
+```
+
+Wireless pairing:
+
+```bash
+adb pair <IP_ADDRESS>:<PORT>
+```
+
 ## Building (aab)
 
 Bump versionCode and versionName in app/build.gradle first.

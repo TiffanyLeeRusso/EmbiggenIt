@@ -1,5 +1,6 @@
 package com.boxcatgames.embiggenit
 
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.SwitchCompat
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var embiggenButton: Button
     private lateinit var clearButton: Button
     private lateinit var settingsButton: Button
+    private lateinit var pasteButton: Button
     private var isSettingsDialogOpen = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         embiggenButton = findViewById(R.id.embiggenButton)
         clearButton = findViewById(R.id.clearButton)
         settingsButton = findViewById(R.id.settingsButton)
+        pasteButton = findViewById(R.id.pasteButton)
 
         embiggenButton.setOnClickListener {
             val text = editText.text.toString()
@@ -54,6 +58,20 @@ class MainActivity : AppCompatActivity() {
             showSettingsDialog()
         }
 
+         pasteButton.setOnClickListener {
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = clipboard.primaryClip
+            if (clip != null && clip.itemCount > 0) {
+                val text = clip.getItemAt(0).coerceToText(this).toString()
+                if (text.isNotBlank()) {
+                    // Insert at cursor position rather than replacing all text
+                    val start = editText.selectionStart.coerceAtLeast(0)
+                    val end = editText.selectionEnd.coerceAtLeast(0)
+                    editText.text.replace(minOf(start, end), maxOf(start, end), text)
+                }
+            }
+        }
+        
         if (savedInstanceState?.getBoolean("settings_open") == true) {
             showSettingsDialog()
         }
@@ -97,6 +115,22 @@ class MainActivity : AppCompatActivity() {
             // Activity recreates here — onSaveInstanceState saves the flag,
             // onCreate restores it and reopens the dialog automatically
         }
+
+        // ---- Brightness ----
+        val brightnessGroup = dialogView.findViewById<RadioGroup>(R.id.brightnessGroup)
+        when (NightModePreference.loadBrightness(prefs)) {
+            NightModePreference.Brightness.FULL      -> brightnessGroup.check(R.id.radioBrightnessFull)
+            NightModePreference.Brightness.MEDIUM    -> brightnessGroup.check(R.id.radioBrightnessMedium)
+            NightModePreference.Brightness.NO_CHANGE -> brightnessGroup.check(R.id.radioBrightnessNoChange)
+        }
+        brightnessGroup.setOnCheckedChangeListener { _, checkedId ->
+            val brightness = when (checkedId) {
+                R.id.radioBrightnessMedium   -> NightModePreference.Brightness.MEDIUM
+                R.id.radioBrightnessNoChange -> NightModePreference.Brightness.NO_CHANGE
+                else                         -> NightModePreference.Brightness.FULL
+            }
+            NightModePreference.saveBrightness(prefs, brightness)
+        }
         
         // ---- Text size ----
         val textSizePreview = dialogView.findViewById<TextView>(R.id.textSizePreview)
@@ -132,6 +166,13 @@ class MainActivity : AppCompatActivity() {
             NightModePreference.saveSliderSide(prefs, side)
         }
 
+        // ---- Center text ----
+        val centerTextSwitch = dialogView.findViewById<SwitchCompat>(R.id.centerTextSwitch)
+        centerTextSwitch.isChecked = NightModePreference.loadCenterText(prefs)
+        centerTextSwitch.setOnCheckedChangeListener { _, isChecked ->
+            NightModePreference.saveCenterText(prefs, isChecked)
+        }
+        
         // ---- Version ----
         val versionText = dialogView.findViewById<TextView>(R.id.versionText)
         val versionName = packageManager.getPackageInfo(packageName, 0).versionName ?: "?"

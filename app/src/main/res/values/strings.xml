@@ -5,6 +5,8 @@
     <string name="embiggen_button">Embiggen It!</string>
     <string name="clear_button">✕</string>
     <string name="clear_desc">Clear text</string>
+    <string name="paste_button">Paste</string>
+    <string name="paste_desc">Paste from clipboard</string>
     <string name="settings_button">⚙</string>
     <string name="settings_desc">Settings</string>
     <string name="settings_title">Settings</string>
@@ -20,4 +22,9 @@
     <string name="settings_slider_side_label">Slider Side</string>
     <string name="settings_slider_side_right">Right</string>
     <string name="settings_slider_side_left">Left</string>
+    <string name="settings_brightness_label">Fullscreen Brightness</string>
+    <string name="settings_brightness_full">Full</string>
+    <string name="settings_brightness_medium">Medium</string>
+    <string name="settings_brightness_no_change">No change</string>
+    <string name="settings_center_text">Center text</string>
 </resources>

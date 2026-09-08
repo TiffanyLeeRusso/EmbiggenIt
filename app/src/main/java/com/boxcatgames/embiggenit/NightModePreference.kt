@@ -4,7 +4,8 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 
 /**
- * Encapsulates all app preferences: night mode and text size.
+ * Encapsulates all app preferences: night mode, text size, slider side,
+ * fullscreen brightness, and center text.
  * Kept free of Activity/Context references so it can be unit tested on the JVM.
  */
 object NightModePreference {
@@ -67,6 +68,34 @@ object NightModePreference {
 
     fun saveSliderSide(prefs: SharedPreferences, side: SliderSide) {
         prefs.edit().putString(KEY_SLIDER_SIDE, side.name).apply()
+    }
+
+    // ---- Fullscreen brightness ----
+
+    const val KEY_BRIGHTNESS = "brightness"
+
+    enum class Brightness { FULL, MEDIUM, NO_CHANGE }
+
+    fun loadBrightness(prefs: SharedPreferences): Brightness =
+        when (prefs.getString(KEY_BRIGHTNESS, "FULL")) {
+            "MEDIUM"    -> Brightness.MEDIUM
+            "NO_CHANGE" -> Brightness.NO_CHANGE
+            else        -> Brightness.FULL
+        }
+
+    fun saveBrightness(prefs: SharedPreferences, brightness: Brightness) {
+        prefs.edit().putString(KEY_BRIGHTNESS, brightness.name).apply()
+    }
+
+    // ---- Center text ----
+
+    const val KEY_CENTER_TEXT = "center_text"
+
+    fun loadCenterText(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_CENTER_TEXT, false)
+
+    fun saveCenterText(prefs: SharedPreferences, center: Boolean) {
+        prefs.edit().putBoolean(KEY_CENTER_TEXT, center).apply()
     }
 
     // ---- Shared ----

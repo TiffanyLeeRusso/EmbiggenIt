@@ -2,13 +2,14 @@ package com.boxcatgames.embiggenit
 
 import android.content.Context
 import android.os.Bundle
-import android.widget.FrameLayout
-import android.widget.LinearLayout
+import android.view.Gravity
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -29,9 +30,19 @@ class FullscreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fullscreen)
 
-        // Full brightness + no cutout overlap
+         val prefs = getSharedPreferences(MainActivity.PREFS_NAME, Context.MODE_PRIVATE)
+
+        // Brightness
+        val brightnessValue = when (NightModePreference.loadBrightness(prefs)) {
+            NightModePreference.Brightness.FULL      -> WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL
+            NightModePreference.Brightness.MEDIUM    -> 0.5f
+            NightModePreference.Brightness.NO_CHANGE -> WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
+        }
+
+        // No cutout overlap (safe-area fitter)
         val params = window.attributes
-        params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL
+        params.screenBrightness = brightnessValue
+        //params.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL
         params.layoutInDisplayCutoutMode =
             WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER
         window.attributes = params
@@ -43,10 +54,16 @@ class FullscreenActivity : AppCompatActivity() {
         sliderBar = findViewById(R.id.sliderBar)
 
         // Load saved text size and apply
-        val prefs = getSharedPreferences(MainActivity.PREFS_NAME, Context.MODE_PRIVATE)
         val savedSp = NightModePreference.loadTextSize(prefs)
         textView.textSize = savedSp
         seekBar.progress = NightModePreference.spToProgress(savedSp)
+
+        // Center text
+        textView.gravity = if (NightModePreference.loadCenterText(prefs)) {
+            Gravity.CENTER
+        } else {
+            Gravity.TOP or Gravity.START
+        }
 
         textView.text = intent.getStringExtra(EXTRA_TEXT) ?: ""
 
@@ -117,7 +134,7 @@ class FullscreenActivity : AppCompatActivity() {
         val barHeight = sliderBar.height
         val barWidth = sliderBar.width
         seekBar.layoutParams = FrameLayout.LayoutParams(barHeight, barWidth).apply {
-            gravity = android.view.Gravity.CENTER
+            gravity = Gravity.CENTER
         }
         // -90°: progress=0 → bottom (smaller), progress=max → top (bigger)
         seekBar.rotation = -90f
