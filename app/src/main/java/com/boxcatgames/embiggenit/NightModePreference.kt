@@ -98,6 +98,17 @@ object NightModePreference {
         prefs.edit().putBoolean(KEY_CENTER_TEXT, center).apply()
     }
 
+    // ---- Show fullscreen sizer ----
+
+    const val KEY_SHOW_SIZER = "show_sizer"
+
+    fun loadShowSizer(prefs: SharedPreferences): Boolean =
+        prefs.getBoolean(KEY_SHOW_SIZER, true)
+
+    fun saveShowSizer(prefs: SharedPreferences, show: Boolean) {
+        prefs.edit().putBoolean(KEY_SHOW_SIZER, show).apply()
+    }
+
     // ---- Shared ----
 
     fun versionLabel(versionName: String): String = "Embiggen It! v$versionName"

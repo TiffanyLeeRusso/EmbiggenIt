@@ -172,7 +172,14 @@ class MainActivity : AppCompatActivity() {
         centerTextSwitch.setOnCheckedChangeListener { _, isChecked ->
             NightModePreference.saveCenterText(prefs, isChecked)
         }
-        
+
+        // ---- Show fullscreen sizer ----
+        val showSizerSwitch = dialogView.findViewById<SwitchCompat>(R.id.showSizerSwitch)
+        showSizerSwitch.isChecked = NightModePreference.loadShowSizer(prefs)
+        showSizerSwitch.setOnCheckedChangeListener { _, isChecked ->
+            NightModePreference.saveShowSizer(prefs, isChecked)
+        }
+
         // ---- Version ----
         val versionText = dialogView.findViewById<TextView>(R.id.versionText)
         val versionName = packageManager.getPackageInfo(packageName, 0).versionName ?: "?"

@@ -88,6 +88,13 @@ class FullscreenActivity : AppCompatActivity() {
             root.addView(sliderBar, 0)
         }
 
+        // Show or hide the fullscreen sizer
+        sliderBar.visibility = if (NightModePreference.loadShowSizer(prefs)) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+
         // SeekBar changes: update text size for this session only (don't save)
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(sb: SeekBar, progress: Int, fromUser: Boolean) {
